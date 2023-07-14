@@ -42,12 +42,17 @@ export class UsersController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    const updatedUser = await this.usersService.updateById(id, updateUserDto);
+    return updatedUser;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.usersService.delete(id);
+  async remove(@Param('id') id: number): Promise<string> {
+    const deletedUser = await this.usersService.delete(id);
+    return `Document with ${deletedUser.name} has been deleted..`;
   }
 }
