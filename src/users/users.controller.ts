@@ -11,14 +11,15 @@ import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { UsersService } from './users.service';
 import { User } from 'src/interfaces/user.interface';
 
+export type MessageResponse = { message: string }
+
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserDto> {
-    this.usersService.create(createUserDto);
-    return createUserDto;
+  async create(@Body() createUserDto: CreateUserDto){
+    await this.usersService.create(createUserDto);
   }
 
   @Get()
@@ -41,8 +42,8 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<string> {
+  async remove(@Param('id') id: number): Promise<MessageResponse> {
     const deletedUser = await this.usersService.delete(id);
-    return `Document with ${deletedUser.name} has been deleted..`;
+    return {message : `Document with ${deletedUser.name} has been deleted..`};
   }
 }
