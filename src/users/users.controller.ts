@@ -1,46 +1,49 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { UsersService } from './users.service';
 import { User } from 'src/interfaces/user.interface';
 
+export type MessageResponse = { message: string }
+
 @Controller('users')
 export class UsersController {
-    constructor(private usersService: UsersService){}
+  constructor(private usersService: UsersService) {}
 
-    // Post Method Simple Example
-    // @Post()
-    // create(@Body() createCatDto: CreateCatDto) {
-    //     return 'This action adds a new cat';
-    //   }
-    @Post()
-    async create(@Body() createUserDto: CreateUserDto): Promise<CreateUserDto> {
-        this.usersService.create(createUserDto);
-        return createUserDto;
-    }
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto){
+    await this.usersService.create(createUserDto);
+  }
 
-    // Get Method Simple Example
-    // @Get()
-    // findAll(@Req() request: Request): string{
-    //     return 'List of users';
-    // }
-    @Get()
-    async findAll(): Promise<User[]>{
-        return this.usersService.findAll();
-    }
+  @Get()
+  async findAll(): Promise<User[]> {
+    return this.usersService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param() params: any): string{
-        console.log(params.id);
-        return `This action returns a #${params.id} user`;
-    }
+  @Get(':id')
+  async findOne(@Param('id') id: number): Promise<User> {
+    return this.usersService.findOne(id);
+  }
 
-    @Put(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto){
-        return `This action updates a #${id} user`;
-    }
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    const updatedUser = await this.usersService.updateById(id, updateUserDto);
+    return updatedUser;
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return `This action removes a #${id} user`;
-    }
+  @Delete(':id')
+  async remove(@Param('id') id: number): Promise<MessageResponse> {
+    const deletedUser = await this.usersService.delete(id);
+    return {message : `Document with ${deletedUser.name} has been deleted..`};
+  }
 }
