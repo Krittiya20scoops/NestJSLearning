@@ -1,17 +1,39 @@
-import { UseSchema } from 'nestjs-yup';
-import { UsersValidator } from '../users/users.validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsEmail, IsNotEmpty, Length, MinLength } from 'class-validator';
 
-// TODO: error here
-// @UseSchema(UsersValidator)
 export class CreateUserDto {
-  @ApiProperty()
-  name: string;
-  @ApiProperty()
-  age: number;
+  @IsString()
+  @IsNotEmpty()
+  @Length(9, 29)
+  firstname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(9, 29)
+  lastname: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 }
 
 export class UpdateUserDto {
-  name: string;
-  age: number;
+  @IsString()
+  @IsNotEmpty()
+  @Length(9, 29)
+  firstname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(9, 29)
+  lastname: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsNotEmpty()
+  @MinLength(8)
+  password: string;
 }

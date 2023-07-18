@@ -9,9 +9,9 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { UsersService } from './users.service';
-import { User } from 'src/interfaces/user.interface';
+import { User } from '../interfaces/user.interface';
 
-export type MessageResponse = { message: string }
+type MessageResponse = { message: string }
 
 @Controller('users')
 export class UsersController {
@@ -44,6 +44,6 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<MessageResponse> {
     const deletedUser = await this.usersService.delete(id);
-    return {message : `Document with ${deletedUser.name} has been deleted..`};
+    return {message : `Document with ${deletedUser.firstname} ${deletedUser.lastname} has been deleted..`};
   }
 }
