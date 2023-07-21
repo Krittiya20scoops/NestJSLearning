@@ -9,16 +9,16 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { UsersService } from './users.service';
-import { User } from 'src/interfaces/user.interface';
+import { User } from '../interfaces/user.interface';
 
-export type MessageResponse = { message: string }
+type MessageResponse = { message: string };
 
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto){
+  async create(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
   }
 
@@ -28,7 +28,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User> {
+  async findOne(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
@@ -44,6 +44,8 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<MessageResponse> {
     const deletedUser = await this.usersService.delete(id);
-    return {message : `Document with ${deletedUser.name} has been deleted..`};
+    return {
+      message: `Document with ${deletedUser.firstname} ${deletedUser.lastname} has been deleted..`,
+    };
   }
 }
