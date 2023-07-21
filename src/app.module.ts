@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './products/products.module';
-import { OrdersController } from './orders/orders.controller';
-import { OrdersService } from './orders/orders.service';
 import { OrdersModule } from './orders/orders.module';
 
 @Module({
