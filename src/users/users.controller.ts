@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { UsersService } from './users.service';
 import { User } from '../interfaces/user.interface';
+import { AuthGuard } from '../auth/auth.guard';
 
 type MessageResponse = { message: string };
 
@@ -17,6 +19,7 @@ type MessageResponse = { message: string };
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
