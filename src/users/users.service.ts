@@ -20,6 +20,10 @@ export class UsersService {
     return this.userModel.findById(id);
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email: email });
+  }
+
   async updateById(id: number, user: User): Promise<User> {
     return this.userModel.findByIdAndUpdate(id, user, { new: true });
   }

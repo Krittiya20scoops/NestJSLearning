@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Product } from '../interfaces/product.interface';
-import { CreateProductDto, UpdateProductDto } from 'src/dto/product.dto';
+import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
 import { ProductsService } from './products.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 export type MessageResponse = { message: string };
 
@@ -18,6 +20,7 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() createUserDto: CreateProductDto) {
     await this.productsService.create(createUserDto);
   }
@@ -33,6 +36,7 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
@@ -45,6 +49,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: string): Promise<MessageResponse> {
     const deletedProduct = await this.productsService.delete(id);
     return {
