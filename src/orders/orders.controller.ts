@@ -6,13 +6,15 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto, UpdateOrderDto } from 'src/dto/order.dto';
+import { CreateOrderDto, UpdateOrderDto } from '../dto/order.dto';
 import { Order } from '../interfaces/order.interface';
-import { UsersService } from 'src/users/users.service';
-import { ProductsService } from 'src/products/products.service';
+import { UsersService } from '../users/users.service';
+import { ProductsService } from '../products/products.service';
 import { isEmpty } from 'lodash';
+import { AuthGuard } from '../auth/auth.guard';
 
 export type MessageResponse = { message: string };
 
@@ -25,6 +27,7 @@ export class OrdersController {
   ) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() createOrderDto: CreateOrderDto) {
     try {
       const ownUser = await this.usersService.findOne(
@@ -62,6 +65,7 @@ export class OrdersController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard)
   async update(
     @Param('id') id: string,
     @Body() updateOrderDto: UpdateOrderDto,
@@ -91,6 +95,7 @@ export class OrdersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: string): Promise<MessageResponse> {
     const deletedOrder = await this.ordersService.delete(id);
     return {

@@ -19,8 +19,8 @@ type MessageResponse = { message: string };
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
+  @UseGuards(AuthGuard)
   async create(@Body() createUserDto: CreateUserDto) {
     await this.usersService.create(createUserDto);
   }
@@ -35,6 +35,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -44,6 +45,7 @@ export class UsersController {
     return updatedUser;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<MessageResponse> {
     const deletedUser = await this.usersService.delete(id);

@@ -24,14 +24,8 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
-  // @Public()
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
-  }
-  @Public()
-  @Get()
-  findAll() {
-    return ['test'];
   }
 }
