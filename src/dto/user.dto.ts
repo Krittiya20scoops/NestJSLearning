@@ -19,7 +19,7 @@ export class CreateUserDto {
   @Length(9, 29)
   lastname: string;
 
-  @Validate(UniqueValidator, ['email'], { message: 'Email is already taken.' })
+  // TODO: for another dup email-validation => @Validate(UniqueValidator, ['email'], { message: 'Email is already taken.' })
   @IsEmail()
   email: string;
 

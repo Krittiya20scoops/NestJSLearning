@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -22,6 +23,8 @@ export class UsersController {
   @Post()
   @UseGuards(AuthGuard)
   async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.findOneByEmail(createUserDto.email);
+    if (user) throw new BadRequestException('This email has already used');
     await this.usersService.create(createUserDto);
   }
 
@@ -37,17 +40,16 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
-  async update(
-    @Param('id') id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
-    const updatedUser = await this.usersService.updateById(id, updateUserDto);
-    return updatedUser;
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.usersService.findOneByEmail(updateUserDto.email);
+    if (user._id != id)
+      throw new BadRequestException('This email has already used');
+    await this.usersService.updateById(id, updateUserDto);
   }
 
   @UseGuards(AuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<MessageResponse> {
+  async remove(@Param('id') id: string): Promise<MessageResponse> {
     const deletedUser = await this.usersService.delete(id);
     return {
       message: `Document with ${deletedUser.firstname} ${deletedUser.lastname} has been deleted..`,
