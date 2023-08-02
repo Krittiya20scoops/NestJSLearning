@@ -3,6 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '../schemas/user.schema';
+import { UniqueValidator } from './users.validator';
 
 @Module({
   imports: [
@@ -10,7 +11,7 @@ import { User, UserSchema } from '../schemas/user.schema';
   ],
   exports: [UsersService],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, UniqueValidator],
 })
 export class UsersModule {
   constructor(private usersService: UsersService) {}

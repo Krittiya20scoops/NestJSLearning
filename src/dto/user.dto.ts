@@ -4,7 +4,9 @@ import {
   IsNotEmpty,
   Length,
   MinLength,
+  Validate,
 } from 'class-validator';
+import { UniqueValidator } from '../users/users.validator';
 
 export class CreateUserDto {
   @IsString()
@@ -17,6 +19,7 @@ export class CreateUserDto {
   @Length(9, 29)
   lastname: string;
 
+  @Validate(UniqueValidator, ['email'], { message: 'Email is already taken.' })
   @IsEmail()
   email: string;
 
