@@ -28,6 +28,12 @@ export class UsersService {
     return this.userModel.findByIdAndUpdate(id, user, { new: true });
   }
 
+  async updateByEmail(email: string, user: User): Promise<User> {
+    return this.userModel.findOneAndUpdate({ email: email }, user, {
+      new: true,
+    });
+  }
+
   async delete(id: string): Promise<User> {
     return this.userModel.findByIdAndDelete(id);
   }

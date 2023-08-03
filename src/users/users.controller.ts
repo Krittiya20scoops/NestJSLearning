@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
@@ -39,12 +40,12 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @Put()
+  async update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     const user = await this.usersService.findOneByEmail(updateUserDto.email);
-    if (user._id != id)
+    if (user && req.user.email !== updateUserDto.email)
       throw new BadRequestException('This email has already used');
-    await this.usersService.updateById(id, updateUserDto);
+    await this.usersService.updateByEmail(req.user.email, updateUserDto);
   }
 
   @UseGuards(AuthGuard)
