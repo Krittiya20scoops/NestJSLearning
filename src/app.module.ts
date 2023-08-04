@@ -5,18 +5,17 @@ import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import databaseConfig from './config/database.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig] }),
     MongooseModule.forRootAsync({
-      // 'mongodb+srv://krittiyas:Kkkkkk1@cluster0.hypyhx9.mongodb.net/testDatabase',
-      // process.env.DATABASE_PATH
       imports: [ConfigModule],
-      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('DATABASE_PATH'),
+        ...configService.get('database'),
       }),
+      inject: [ConfigService],
     }),
     UsersModule,
     ProductsModule,
